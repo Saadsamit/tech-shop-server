@@ -24,6 +24,7 @@ async function run() {
     const database = client.db("Tech-Shop");
     const brand = database.collection("brand");
     const brandItem = database.collection("brandItem");
+    const cardData = database.collection("cardData");
     app.get("/brands", async (req, res) => {
       const getBrands = brand.find();
       const result = await getBrands.toArray();
@@ -81,6 +82,22 @@ async function run() {
       const id = req.params.id;
       const findId = { _id: new ObjectId(id) };
       const result = await brandItem.findOne(findId);
+      res.send(result);
+    });
+    app.post("/cardData", async (req, res) => {
+      const data = req.body;
+      const result = await cardData.insertOne(data);
+      res.send(result);
+    });
+    app.get("/cardData", async (req, res) => {
+      const data = cardData.find();
+      const result = await data.toArray();
+      res.send(result);
+    });
+    app.delete("/cardData/:id", async (req, res) => {
+      const id = req.params.id;
+      const findId = { _id: new ObjectId(id) };
+      const result = await cardData.deleteOne(findId);
       res.send(result);
     });
     await client.db("admin").command({ ping: 1 });
