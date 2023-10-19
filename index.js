@@ -23,9 +23,33 @@ async function run() {
   try {
     const database = client.db("Tech-Shop");
     const brand = database.collection("brand");
+    const brandItem = database.collection("brandItem");
     app.get("/brands", async (req, res) => {
       const getBrands = brand.find();
       const result = await getBrands.toArray();
+      res.send(result);
+    });
+    app.get("/brands/:id", async (req, res) => {
+      const id = req.params.id;
+      const find = { _id: new ObjectId(id) };
+      const result = await brand.findOne(find);
+      res.send(result);
+    });
+    app.post("/brandItem", async (req, res) => {
+      const data = req.body;
+      const result = await brandItem.insertOne(data);
+      res.send(result);
+    });
+    app.get("/brandItem", async (req, res) => {
+      const getBrands = brandItem.find();
+      const result = await getBrands.toArray();
+      res.send(result);
+    });
+    app.get("/brandItem/:name", async (req, res) => {
+      const name = req.params.name.toLowerCase();
+      const filder = { brand: name };
+      const sult = brandItem.find(filder);
+      const result = await sult.toArray();
       res.send(result);
     });
     await client.db("admin").command({ ping: 1 });
