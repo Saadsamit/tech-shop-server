@@ -52,6 +52,37 @@ async function run() {
       const result = await sult.toArray();
       res.send(result);
     });
+    app.put("/brandItem/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const findId = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          image: data.image,
+          name: data.name,
+          brand: data.brand,
+          type: data.type,
+          price: data.price,
+          rating: data.rating,
+          description: data.description,
+        },
+      };
+      const result = await brandItem.updateOne(findId, updateDoc, options);
+      res.send(result);
+    });
+    app.delete("/brandItem/:id", async (req, res) => {
+      const id = req.params.id;
+      const findId = { _id: new ObjectId(id) };
+      const result = await brandItem.deleteOne(findId);
+      res.send(result);
+    });
+    app.get("/Item/:id", async (req, res) => {
+      const id = req.params.id;
+      const findId = { _id: new ObjectId(id) };
+      const result = await brandItem.findOne(findId);
+      res.send(result);
+    });
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
