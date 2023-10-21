@@ -94,6 +94,13 @@ async function run() {
       const result = await data.toArray();
       res.send(result);
     });
+    app.get("/cardData/:email", async (req, res) => {
+      const email = req.params.email
+      const filder = { email: email };
+      const data = cardData.find(filder);
+      const result = await data.toArray();
+      res.send(result);
+    });
     app.delete("/cardData/:id", async (req, res) => {
       const id = req.params.id;
       const findId = { _id: new ObjectId(id) };
